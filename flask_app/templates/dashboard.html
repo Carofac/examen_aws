@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container col-10">
+        <header class="d-flex justify-content-between align-items-center"> <!--agrgamos display flex al header-->
+            <h1>¡Bienvenid@ {{user.name}} !</h1>
+            <a href="/new/appointment" class="btn btn-success">Nueva cita</a>
+            <a href="/logout" class="btn btn-danger">Cerrar Sesión</a>
+        </header>
+    </div>
+    <hr>
+    <div class= "container col-10">
+    <h2>¡Aqui se encuentran tus proximas citas!</h2>
+    <table class="table table-success table-striped">
+        <thead>
+            <tr>
+                <th>Citas</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for appointment in appointments if appointment.date >= now().date() %}
+                {% if appointment.user_id == session["user_id"] %}
+                    <tr>
+                        <td>{{appointment.task}}</td>
+                        <td>{{appointment.date.strftime("%d/%B/%y")}}</td>
+                        <td>{{appointment.status}}</td>
+                        <td>
+                            {% if appointment.status == "Pendiente"%}
+                            <a href="/edit/appointment/{{appointment.id}}"class="btn btn-warning">Editar</a>
+                            <a href="/delete/appointment/{{appointment.id}}"class="btn btn-danger">Borrar</a>
+                            {%endif%}
+                        </td>
+                    </tr>
+                {%endif%}
+            {%endfor%}
+        </tbody>
+    </table>
+    </div>
+    <hr>
+    <div class= "container col-10">
+    <h2>Citas pasadas</h2>
+    <table class="table table-warning table-striped col">
+        <thead>
+            <tr>
+                <th>Citas</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for appointment in appointments if appointment.date < now().date() %}
+                {% if appointment.user_id == session["user_id"] %}
+                    <tr>
+                        <td>{{appointment.task}}</td>
+                        <td>{{appointment.date.strftime("%d/%B/%y")}}</td>
+                    </tr>
+                {%endif%}
+            {%endfor%}
+        </tbody>
+    </table>
+    </div>
+</body>
+</html>
