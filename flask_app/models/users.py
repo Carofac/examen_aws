@@ -65,7 +65,7 @@ class User:
     
     @classmethod
     def get_by_email(cls,form):
-        #form={ "email":"elena@codingdojo.com, "password": "hola123"}
+
         query= "SELECT * FROM  users WHERE email = %(email)s"
         result= connectToMySQL("esquema_examen").query_db(query,form) # select regresa una lista de diccionario
         if len(result) < 1:
